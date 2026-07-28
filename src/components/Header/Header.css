@@ -1,0 +1,21 @@
+.header {
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	padding: 20px;
+	background: white;
+	border-bottom: 1px solid #ddd;
+}
+
+.header button {
+	margin-left: 10px;
+	padding: 10px 18px;
+	border: none;
+	cursor: pointer;
+	border-radius: 6px;
+}
+
+.add {
+	background: #6C4CF1;
+	color: white;
+}
