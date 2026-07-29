@@ -6,14 +6,17 @@ import SidebarItem from "./SidebarItem";
 const menus = [{
 	title: "Dashboard",
 	icon: <FaHome />,
+	path: "/"
 },
 {
 	title: "Finance",
-	icon: <FaMoneyBill />
+	icon: <FaMoneyBill />,
+	path: "finance"
 },
 {
 	title: "Sales CRM",
-	icon: <FaUserFriends />
+	icon: <FaUserFriends />,
+	path: '/salescrm'
 },
 {
 	title: "RMS",
@@ -22,27 +25,27 @@ const menus = [{
 	subNav: [
 		{
 			title: "Dashboard",
-			path: "#",
+			path: "/rms/dashboard",
 			icon: <FaHome />
 		},
 		{
 			title: "Disbursement",
-			path: "#",
+			path: "rms/disbursement",
 			icon: <FaMoneyBill />
 		},
 		{
 			title: "Invoices",
-			path: "#",
+			path: "rms/invoice",
 			icon: <FaMoneyBill />
 		},
 		{
 			title: "PO",
-			path: "#",
+			path: "rms/po",
 			icon: <FaMoneyBill />
 		},
 		{
 			title: "RMS Reports",
-			path: "#",
+			path: "rms/rmsreports",
 			icon: <FaMoneyBill />
 		},
 
@@ -50,26 +53,30 @@ const menus = [{
 },
 {
 	title: "Compliance",
-	icon: <FaChartBar />
+	icon: <FaChartBar />,
+	path: "/compliance"
 },
 {
 	title: "Vendors",
-	icon: <FaUserFriends />
+	icon: <FaUserFriends />,
+	path: "/vendors"
 },
 {
 	title: "AI Suits",
-	icon: <FaChartBar />
+	icon: <FaChartBar />,
+	path: "/aisuits"
 },
 {
 	title: "Reports",
-	icon: <FaChartBar />
+	icon: <FaChartBar />,
+	path: "/reports"
 },
 ]
 
 export default function Sidebar() {
 	const [searchQuery, setSearchQuery] = useState("");
 
-	
+
 	const filteredMenus = menus.filter((menu) => {
 		const mainMatch = menu.title?.toLowerCase().includes(searchQuery.toLowerCase());
 		const subMatch = menu.subNav?.some((sub) =>
@@ -96,13 +103,13 @@ export default function Sidebar() {
 			<nav className="menu-list">
 				{filteredMenus.map((menu) => (
 					<div key={menu.title}>
-						<SidebarItem key={menu.title} menu={menu} />
-						{menu.title==="Dashboard"&&(
-							<hr className="dashboard-divider"/>
+						<SidebarItem key={menu.title} menu={menu} searchQuery={searchQuery} />
+						{menu.title === "Dashboard" && (
+							<hr className="dashboard-divider" />
 						)}
 					</div>
 				))}
-				</nav>
+			</nav>
 		</aside>
 	)
 }
