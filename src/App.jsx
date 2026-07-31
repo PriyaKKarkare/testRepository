@@ -1,7 +1,6 @@
 import './App.css'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import Sidebar from './components/SideBar/Sidebar'
-import Header from './components/Header/Header'
 import DashBoard from './pages/DashBoard'
 import Home from './pages/Home'
 import Navbar from './components/NavBar/Navbar'

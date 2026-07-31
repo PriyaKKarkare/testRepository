@@ -1,6 +1,5 @@
 import React from 'react'
-import Card from './Card'
-import "./DashBoardsCards.css";
+
 
 const DashBoardsCards = () => {
 	const cards = [
@@ -48,7 +47,7 @@ const DashBoardsCards = () => {
 			{cards.map((card, index) => (
 				<div
 					key={index}
-					className="bg-white rounded-xl border border-gray-100 p-5 shadow-[0_2px_8px_rgba(0,0,0,0.02)] flex flex-col justify-between min-h-[110px]"
+					className="bg-white rounded-xl border border-gray-100 p-5 shadow-[0_2px_8px_rgba(0,0,0,0.02)] flex flex-col justify-between min-h-110px"
 				>
 					<span className='text-xs font-medium text-gray-500 tracking-wide block mb-3 line-clamp-2'>
 						{card.title}
@@ -64,11 +63,11 @@ const DashBoardsCards = () => {
 							{card.value}
 						</span>
 					</div>
-					</div>
+				</div>
 			))}
 
-				</div>
-			)
+		</div>
+	)
 }
 
-			export default DashBoardsCards
+export default DashBoardsCards
