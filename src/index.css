@@ -1,4 +1,4 @@
-@import "tailwindcss";
+/* @import "tailwindcss";
 
 html,
 body,
@@ -9,8 +9,22 @@ body,
   width: 100%;
   overflow: hidden !important;
   /* Fully locks background window viewport bouncing */
+/* }  */
+
+@import "tailwindcss";
+
+:root {
+  color-scheme: light;
 }
 
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+}
 
 
 /* :root {
@@ -64,10 +78,10 @@ body,
     filter: invert(1) brightness(2);
   }
 } */
-
+/* 
 body {
   margin: 0;
-}
+} */
 
 /* #root {
   width: 1126px;
@@ -81,7 +95,7 @@ body {
   box-sizing: border-box;
 } */
 
-h1,
+/* h1,
 h2 {
   font-family: var(--heading);
   font-weight: 500;
@@ -127,4 +141,4 @@ code {
   line-height: 135%;
   padding: 4px 8px;
   background: var(--code-bg);
-}
+} */

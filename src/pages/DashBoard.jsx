@@ -1,403 +1,340 @@
-import React, { useState } from 'react'
-import DashBoardsCards from '../components/DashBoardsCards/DashBoardsCards'
-import { FiBell, FiChevronDown, FiBarChart2, FiDownload, FiChevronLeft, FiChevronRight, FiSearch, FiChevronsLeft, FiChevronsRight } from 'react-icons/fi'
-import { Pagination } from '../components/Pagination/Pagination'
+import React, { useState } from "react";
+import {
+  Plus,
+  ChevronLeft,
+  ChevronRight,
+  MoreVertical,
+  Search,
+  SlidersHorizontal,
+  ArrowUpRight,
+  ArrowDownLeft,
+  Bitcoin,
+  Wallet,
+} from "lucide-react";
 
+const stats = [
+  { label: "Portfolio Value", value: "$58,145.07", delta: "+2.5%", up: true },
+  { label: "Total Crypto Earnings", value: "$23,450.25", delta: "+4.6%", up: true },
+  { label: "Total Withdrawals", value: "$18,500.99", delta: "-4.3%", up: false },
+  { label: "Staking Rewards", value: "$6,765.12", delta: "+8.2%", up: true },
+];
 
-const DashBoard = () => {
+const topGainers = [
+  { name: "Bitcoin (BTC)", amount: "$26,000", pct: 78 },
+  { name: "Ethereum (ETH)", amount: "$14,340", pct: 52 },
+  { name: "Solana (SOL)", amount: "$10,400", pct: 65 },
+];
 
-	// Define table columns configuration
-	const tableData = [
-		{
-			date: '30/04/2024',
-			loanId: 'LN002-24-1001',
-			status: 'Draft',
-			statusColor: 'bg-gray-100 text-gray-700 border-gray-300',
-			statusDot: 'bg-gray-500',
-			applicant: 'Arjun Mehta',
-			bank: 'HDFC Bank',
-			sanctionedAmt: '7500.00',
-			verifiedAmt: '₹7,00,000.00',
-			referralPct: '0.1500%',
-			creditExecutive: 'Arjun Mehta',
-			bankRM: 'Siddharth',
-		},
-		{
-			date: '30/09/2024',
-			loanId: 'LN003-24-1002',
-			status: 'Submitted',
-			statusColor: 'bg-emerald-50 text-emerald-700 border-emerald-200',
-			statusDot: 'bg-emerald-500',
-			applicant: 'Mohit Agarwal',
-			bank: 'ICICI Bank',
-			sanctionedAmt: '12000.00',
-			verifiedAmt: '—',
-			referralPct: '0.2500%',
-			creditExecutive: 'Mohit Agarwal',
-			bankRM: 'Tanvi N',
-		},
-		{
-			date: '12/05/2027',
-			loanId: 'LN004-24-1003',
-			status: 'Submitted',
-			statusColor: 'bg-emerald-50 text-emerald-700 border-emerald-200',
-			statusDot: 'bg-emerald-500',
-			applicant: 'Priya Singh',
-			bank: 'Axis Bank',
-			sanctionedAmt: '15000.00',
-			verifiedAmt: '—',
-			referralPct: '0.3500%',
-			creditExecutive: 'Priya Singh',
-			bankRM: 'Deepa',
-		},
-		{
-			date: '15/01/2024',
-			loanId: 'LN005-24-1004',
-			status: 'Submitted',
-			statusColor: 'bg-emerald-50 text-emerald-700 border-emerald-200',
-			statusDot: 'bg-emerald-500',
-			applicant: 'Simran Anand',
-			bank: 'State Bank of India',
-			sanctionedAmt: '22000.00',
-			verifiedAmt: '—',
-			referralPct: '0.4500%',
-			creditExecutive: 'Simran Anand',
-			bankRM: 'Suresh',
-		},
-		{
-			date: '20/02/2024',
-			loanId: 'LN006-24-1005',
-			status: 'Submitted',
-			statusColor: 'bg-emerald-50 text-emerald-700 border-emerald-200',
-			statusDot: 'bg-emerald-500',
-			applicant: 'Ravi Sharma',
-			bank: 'Kotak Mahindra Bank',
-			sanctionedAmt: '30000.00',
-			verifiedAmt: '—',
-			referralPct: '0.5500%',
-			creditExecutive: 'Ravi Sharma',
-			bankRM: 'Rahul V',
-		},
-		{
-			date: '20/02/2024',
-			loanId: 'LN007-24-1006',
-			status: 'Submitted',
-			statusColor: 'bg-emerald-50 text-emerald-700 border-emerald-200',
-			statusDot: 'bg-emerald-500',
-			applicant: 'Sneha Joshi',
-			bank: 'Punjab National Bank',
-			sanctionedAmt: '40000.00',
-			verifiedAmt: '—',
-			referralPct: '0.6500%',
-			creditExecutive: 'Sneha Joshi',
-			bankRM: 'Pooja S',
-		},
-		{
-			date: '20/02/2024',
-			loanId: 'LN001-24-1004',
-			status: 'Verified',
-			statusColor: 'bg-blue-50 text-blue-700 border-blue-200',
-			statusDot: 'bg-blue-500',
-			applicant: 'Vikram Desai',
-			bank: 'Canara Bank',
-			sanctionedAmt: '55000.00',
-			verifiedAmt: '₹15,78,901.00',
-			referralPct: '0.7500%',
-			creditExecutive: 'Vikram Desai',
-			bankRM: 'Manish',
-		},
-		{
-			date: '20/02/2024',
-			loanId: 'LN008-24-1007',
-			status: 'Audited',
-			statusColor: 'bg-purple-50 text-purple-700 border-purple-200',
-			statusDot: 'bg-purple-500',
-			applicant: 'Anjali Rao',
-			bank: 'Bank of Baroda',
-			sanctionedAmt: '75000.00',
-			verifiedAmt: '₹16,89,012.00',
-			referralPct: '0.8500%',
-			creditExecutive: 'Anjali Rao',
-			bankRM: 'Kavita',
-		},
-		{
-			date: '20/02/2024',
-			loanId: 'LN009-24-1008',
-			status: 'Audited',
-			statusColor: 'bg-purple-50 text-purple-700 border-purple-200',
-			statusDot: 'bg-purple-500',
-			applicant: 'Karan Iyer',
-			bank: 'Union Bank of India',
-			sanctionedAmt: '90000.00',
-			verifiedAmt: '₹17,00,123.00',
-			referralPct: '0.9500%',
-			creditExecutive: 'Karan Iyer',
-			bankRM: 'Ankit P',
-		},
-		{
-			date: '20/02/2024',
-			loanId: 'LN010-24-1009',
-			status: 'Verified',
-			statusColor: 'bg-blue-50 text-blue-700 border-blue-200',
-			statusDot: 'bg-blue-500',
-			applicant: 'Neha Gupta',
-			bank: 'IDFC FIRST Bank',
-			sanctionedAmt: '130000.00',
-			verifiedAmt: '₹18,11,234.00',
-			referralPct: '1.1500%',
-			creditExecutive: 'Neha Gupta',
-			bankRM: 'Ritika M',
-		},
-	]
+const topLosers = [
+  { name: "Cardano (ADA)", amount: "$2,600", pct: 35 },
+  { name: "Ripple (XRP)", amount: "$1,340", pct: 20 },
+  { name: "Polkadot (DOT)", amount: "$400", pct: 15 },
+];
 
-	// State for row selection
-	const [selectedRows, setSelectedRows] = useState([])
+const transactions = [
+  { name: "Bitcoin Buy", type: "Buy", amount: "+ 0.0204 BTC", val: "$1,500.00", date: "16 Oct 2025, 10:12 AM", initials: "BTC", tone: "bg-amber-100 text-amber-700" },
+  { name: "Ethereum Swap", type: "Swap", amount: "- 0.45 ETH", val: "$1,250.00", date: "10 Oct 2025, 08:20 AM", initials: "ETH", tone: "bg-indigo-100 text-indigo-700" },
+  { name: "Solana Deposit", type: "Deposit", amount: "+ 12.5 SOL", val: "$1,850.00", date: "07 Oct 2025, 07:31 PM", initials: "SOL", tone: "bg-purple-100 text-purple-700" },
+  { name: "USDC Withdrawal", type: "Withdrawal", amount: "- 309.99 USDC", val: "$309.99", date: "06 Oct 2025, 07:31 PM", initials: "USDC", tone: "bg-blue-100 text-blue-700" },
+  { name: "Cardano Sell", type: "Sell", amount: "- 500 ADA", val: "$409.99", date: "04 Oct 2025, 07:31 PM", initials: "ADA", tone: "bg-sky-100 text-sky-700" },
+  { name: "Polkadot Stake", type: "Stake", amount: "+ 45 DOT", val: "$309.99", date: "02 Oct 2025, 12:31 PM", initials: "DOT", tone: "bg-pink-100 text-pink-700" },
+];
 
-	// State for pagination
-	const [currentPage, setCurrentPage] = useState(1)
-	const [pageSize, setPageSize] = useState(10)
+const LineChart = () => {
+  const width = 560;
+  const height = 180;
+  const seriesA = [40, 55, 50, 70, 60, 90, 75, 95, 85, 110, 100, 150];
+  const seriesB = [90, 70, 60, 50, 65, 55, 75, 60, 90, 80, 95, 130];
 
-	// Select All Handler
-	const handleSelectAll = (e) => {
-		if (e.target.checked) {
-			setSelectedRows(tableData.map((row) => row.loanId))
-		} else {
-			setSelectedRows([])
-		}
-	}
+  const toPoints = (series) => {
+    const max = Math.max(...seriesA, ...seriesB);
+    const stepX = width / (series.length - 1);
+    return series
+      .map((v, i) => `${i * stepX},${height - (v / max) * (height - 20)}`)
+      .join(" ");
+  };
 
-	// Single Row Select Handler
-	const handleSelectRow = (loanId) => {
-		setSelectedRows((prev) =>
-			prev.includes(loanId) ? prev.filter((id) => id !== loanId) : [...prev, loanId]
-		)
-	}
+  return (
+    <svg viewBox={`0 0 ${width} ${height}`} className="w-full" preserveAspectRatio="none">
+      <polyline points={toPoints(seriesA)} fill="none" stroke="#6366f1" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+      <polyline points={toPoints(seriesB)} fill="none" stroke="#f59e0b" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+};
 
-	const isAllSelected = selectedRows.length === tableData.length && tableData.length > 0
+export default function CryptoDashboard() {
+  const [checked, setChecked] = useState([]);
 
+  const toggleRow = (key) =>
+    setChecked((prev) => (prev.includes(key) ? prev.filter((n) => n !== key) : [...prev, key]));
 
-	return (
-		<div className='p-6 space-y-6 flex flex-col h-full bg-[#F6F5FD] min-h-screen text-gray-800 font-sans'>
-			{/* Page Header Area */}
-			<div className='flex w-full items-center justify-between gap-6'>
-				<div className='shrink-0'>
-					<h1 className='text-xl font-bold text-gray-900'>Disbursement</h1>
-					<div className='mt-1 flex items-center space-x-1.5 text-xs text-gray-500'>
-						<span>RMS</span>
-						<FiChevronDown className='text-gray-400 text-sm' />
-						<span className='font-medium text-indigo-600'>
-							Disbursement
-						</span>
-					</div>
-				</div>
-				<div className='flex items-center space-x-3 shrink-0'>
-					{/* Activity Button */}
-					<button className='flex items-center space-x-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-2xs hover:bg-gray-50 transition-colors'>
-						<FiBarChart2 className="h-4 w-4 text-gray-500" />
-						<span>Activity</span>
-					</button>
+  return (
+    <div className="w-full min-h-screen bg-[#F6F5FD] p-4 sm:p-6 flex flex-col gap-6">
+      {/* Top Header */}
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h1 className="text-xl font-bold text-gray-900">Crypto Overview</h1>
+        <div className="flex items-center gap-3">
+          <button className="flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-2xs hover:bg-gray-50">
+            <Wallet size={16} className="text-gray-500" />
+            Manage Wallets
+          </button>
+          <button className="flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700">
+            <Plus size={16} />
+            Buy / Sell Crypto
+          </button>
+        </div>
+      </div>
 
-					{/* Import Excel Button */}
-					<button className='flex items-center space-x-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-2xs hover:bg-gray-50 transition-colors'>
-						<FiDownload className="h-4 w-4 text-gray-500" />
-						<span>Import Excel</span>
-					</button>
+      {/* Quick Stats Banner */}
+      <div className="grid grid-cols-1 gap-4 rounded-xl border border-gray-200 bg-white p-2 shadow-2xs sm:grid-cols-2 xl:grid-cols-4 xl:divide-x xl:divide-gray-100">
+        {stats.map((stat) => (
+          <div key={stat.label} className="px-4 py-3">
+            <p className="text-xs text-gray-500">{stat.label}</p>
+            <p className="mt-1 text-2xl font-bold text-gray-900">{stat.value}</p>
+            <span className={`mt-1 inline-flex items-center gap-1 text-xs font-medium ${stat.up ? "text-emerald-600" : "text-rose-500"}`}>
+              {stat.delta} <span className="font-normal text-gray-400">vs last month</span>
+            </span>
+          </div>
+        ))}
+      </div>
 
-					{/* Split Action Dropdown Button Group */}
-					<div className='inline-flex rounded-lg shadow-2xs'>
-						<button className='rounded-l-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 transition-colors'>
-							Add Disbursement
-						</button>
-						<button className='flex items-center rounded-r-lg border-l border-indigo-500 bg-indigo-600 px-2.5 py-2 text-sm font-semibold text-white hover:bg-indigo-700 transition-colors'>
-							<FiChevronDown className="h-4 w-4" />
-						</button>
-					</div>
-				</div>
+      {/* Main Charts & Analytics Section */}
+      <div className="grid grid-cols-1 gap-4 xl:grid-cols-[1.4fr_1fr]">
+        <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-2xs">
+          <div className="flex items-center justify-between">
+            <h2 className="text-sm font-semibold text-gray-800">Market Performance</h2>
+            <button className="text-xs font-medium text-indigo-600 hover:text-indigo-700">View All Assets</button>
+          </div>
 
-			</div>
+          <div className="mt-4 flex flex-wrap gap-8">
+            <div className="flex items-center gap-2">
+              <span className="grid h-8 w-8 place-items-center rounded-full bg-indigo-50 text-indigo-600">
+                <ArrowUpRight size={15} />
+              </span>
+              <div>
+                <p className="text-xs text-gray-500">Total Buy Volume</p>
+                <p className="text-sm font-semibold text-gray-900">$34,200.00</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="grid h-8 w-8 place-items-center rounded-full bg-amber-50 text-amber-500">
+                <ArrowDownLeft size={15} />
+              </span>
+              <div>
+                <p className="text-xs text-gray-500">Total Sell Volume</p>
+                <p className="text-sm font-semibold text-gray-900">$18,400.00</p>
+              </div>
+            </div>
+          </div>
 
+          <div className="mt-4">
+            <LineChart />
+            <div className="mt-1 flex justify-between text-[11px] text-gray-400">
+              <span>01 June</span>
+              <span>07 July</span>
+            </div>
+          </div>
+        </div>
 
-			{/* Metric Component Cards */}
-			<DashBoardsCards />
+        <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-2xs">
+          <div className="flex items-center justify-between">
+            <h2 className="text-sm font-semibold text-gray-800">Top Coin Performance</h2>
+            <div className="flex items-center gap-2 text-xs text-gray-500">
+              <button className="rounded-md p-1 hover:bg-gray-50">
+                <ChevronLeft size={14} />
+              </button>
+              <span>Sep, 2025</span>
+              <button className="rounded-md p-1 hover:bg-gray-50">
+                <ChevronRight size={14} />
+              </button>
+            </div>
+          </div>
 
-			<div className='bg-white rounded-xl border border-gray-200 shadow-2xs overflow-hidden flex flex-col'>
-				{/* Table Control Header */}
-				<div className='p-4 border-b border-gray-100 flex items-center justify-between gap-4 flex-wrap'>
-					<div className='relative flex-1 min-w-[240px] max-w-md'>
-						<FiSearch className='absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm' />
-						<input
-							type='text'
-							placeholder='Search for Disbursement'
-							className='w-full pl-9 pr-4 py-1.5 text-xs bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 text-gray-700 placeholder-gray-400'
-						/>
-					</div>
-					<div className='flex items-center space-x-2'>
-						{selectedRows.length > 0 && (
-							<span className='text-xs text-indigo-600 font-medium px-2 py-1 bg-indigo-50 rounded-md border border-indigo-100'>
-								{selectedRows.length} selected
-							</span>
-						)}
-						<button className='flex items-center space-x-1.5 px-3 py-1.5 border border-gray-200 rounded-lg text-xs font-medium text-gray-600 hover:bg-gray-50'>
-							<span>Saved View</span>
-							<FiChevronDown className='text-gray-400' />
-						</button>
-						<button className='flex items-center space-x-1.5 px-3 py-1.5 border border-gray-200 rounded-lg text-xs font-medium text-gray-600 hover:bg-gray-50'>
-							<span>Export All</span>
-							<FiChevronDown className='text-gray-400' />
-						</button>
-					</div>
-				</div>
+          <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div className="rounded-lg border border-gray-100 p-3">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-xs text-gray-500">Top Gainers</p>
+                  <p className="text-sm font-semibold text-gray-900">$50,740.00</p>
+                </div>
+                <MoreVertical size={14} className="text-gray-400" />
+              </div>
+              <div className="mt-3 flex flex-col gap-3">
+                {topGainers.map((item) => (
+                  <div key={item.name}>
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="text-gray-600">{item.name}</span>
+                      <span className="font-medium text-gray-800">{item.amount}</span>
+                    </div>
+                    <div className="mt-1 h-1.5 w-full rounded-full bg-indigo-100">
+                      <div className="h-1.5 rounded-full bg-indigo-500" style={{ width: `${item.pct}%` }} />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
 
-				{/* Responsive Scrollable Table */}
-				<div className='overflow-x-auto'>
-					<table className='w-full text-left text-xs text-gray-600 border-collapse'>
-						<thead className='bg-gray-50 text-gray-500 font-medium border-b border-gray-200 uppercase tracking-wider'>
-							<tr>
-								<th className='p-3.5 w-10 text-center'>
-									<input
-										type='checkbox'
-										checked={isAllSelected}
-										onChange={handleSelectAll}
-										className='rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 accent-indigo-600 cursor-pointer'
-									/>
-								</th>
-								<th className='p-3.5 whitespace-nowrap'>
-									<div className='flex items-center space-x-1 cursor-pointer'>
-										<span>Disbursement Date</span>
-										<FiChevronDown className='text-gray-400' />
-									</div>
-								</th>
-								<th className='p-3.5 whitespace-nowrap'>
-									<div className='flex items-center space-x-1 cursor-pointer'>
-										<span>Loan ID</span>
-										<FiChevronDown className='text-gray-400' />
-									</div>
-								</th>
-								<th className='p-3.5 whitespace-nowrap'>
-									<div className='flex items-center space-x-1 cursor-pointer'>
-										<span>Status</span>
-										<FiChevronDown className='text-gray-400' />
-									</div>
-								</th>
-								<th className='p-3.5 whitespace-nowrap'>
-									<div className='flex items-center space-x-1 cursor-pointer'>
-										<span>Applicant Name</span>
-										<FiChevronDown className='text-gray-400' />
-									</div>
-								</th>
-								<th className='p-3.5 whitespace-nowrap'>
-									<div className='flex items-center space-x-1 cursor-pointer'>
-										<span>Bank Name</span>
-										<FiChevronDown className='text-gray-400' />
-									</div>
-								</th>
-								<th className='p-3.5 whitespace-nowrap text-right'>
-									<div className='flex items-center justify-end space-x-1 cursor-pointer'>
-										<span>Sanctioned Amt</span>
-										<FiChevronDown className='text-gray-400' />
-									</div>
-								</th>
-								<th className='p-3.5 whitespace-nowrap text-right'>
-									<div className='flex items-center justify-end space-x-1 cursor-pointer'>
-										<span>Verified</span>
-										<FiChevronDown className='text-gray-400' />
-									</div>
-								</th>
-								<th className='p-3.5 whitespace-nowrap text-right'>
-									<div className='flex items-center justify-end space-x-1 cursor-pointer'>
-										<span>Referral %</span>
-										<FiChevronDown className='text-gray-400' />
-									</div>
-								</th>
-								<th className='p-3.5 whitespace-nowrap'>
-									<div className='flex items-center space-x-1 cursor-pointer'>
-										<span>Credit Executive</span>
-										<FiChevronDown className='text-gray-400' />
-									</div>
-								</th>
-								<th className='p-3.5 whitespace-nowrap'>
-									<div className='flex items-center space-x-1 cursor-pointer'>
-										<span>Bank RM</span>
-									</div>
-								</th>
-							</tr>
-						</thead>
-						<tbody className='divide-y divide-gray-100 bg-white'>
-							{tableData.map((row) => {
-								const isSelected = selectedRows.includes(row.loanId)
-								return (
-									<tr
-										key={row.loanId}
-										className={`transition-colors ${isSelected ? 'bg-indigo-50/40' : 'hover:bg-gray-50/80'
-											}`}
-									>
-										<td className='p-3.5 text-center'>
-											<input
-												type='checkbox'
-												checked={isSelected}
-												onChange={() => handleSelectRow(row.loanId)}
-												className='rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 accent-indigo-600 cursor-pointer'
-											/>
-										</td>
-										<td className='p-3.5 whitespace-nowrap text-gray-700'>{row.date}</td>
-										<td className='p-3.5 whitespace-nowrap font-medium text-indigo-600 hover:underline cursor-pointer'>
-											{row.loanId}
-										</td>
-										<td className='p-3.5 whitespace-nowrap'>
-											<span
-												className={`inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium border ${row.statusColor}`}
-											>
-												<span className={`w-1.5 h-1.5 rounded-full ${row.statusDot}`}></span>
-												<span>{row.status}</span>
-											</span>
-										</td>
-										<td className='p-3.5 whitespace-nowrap font-medium text-gray-900'>
-											{row.applicant}
-										</td>
-										<td className='p-3.5 whitespace-nowrap text-gray-600'>{row.bank}</td>
-										<td className='p-3.5 whitespace-nowrap text-right text-gray-700 font-mono'>
-											{row.sanctionedAmt}
-										</td>
-										<td className='p-3.5 whitespace-nowrap text-right text-gray-700 font-mono'>
-											{row.verifiedAmt}
-										</td>
-										<td className='p-3.5 whitespace-nowrap text-right text-gray-600'>
-											{row.referralPct}
-										</td>
-										<td className='p-3.5 whitespace-nowrap'>
-											<div className='flex items-center space-x-2'>
-												<div className='w-6 h-6 rounded-full bg-amber-100 text-amber-800 flex items-center justify-center font-semibold text-[10px] shrink-0 border border-amber-200'>
-													{row.creditExecutive.charAt(0)}
-												</div>
-												<span className='text-gray-800 font-medium'>{row.creditExecutive}</span>
-											</div>
-										</td>
-										<td className='p-3.5 whitespace-nowrap'>
-											<div className='flex items-center space-x-2'>
-												<div className='w-6 h-6 rounded-full bg-rose-100 text-rose-800 flex items-center justify-center font-semibold text-[10px] shrink-0 border border-rose-200'>
-													{row.bankRM.charAt(0)}
-												</div>
-												<span className='text-gray-800 font-medium'>{row.bankRM}</span>
-											</div>
-										</td>
-									</tr>
-								)
-							})}
-						</tbody>
-					</table>
+            <div className="rounded-lg border border-gray-100 p-3">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-xs text-gray-500">Declining Assets</p>
+                  <p className="text-sm font-semibold text-gray-900">$4,340.00</p>
+                </div>
+                <MoreVertical size={14} className="text-gray-400" />
+              </div>
+              <div className="mt-3 flex flex-col gap-3">
+                {topLosers.map((item) => (
+                  <div key={item.name}>
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="text-gray-600">{item.name}</span>
+                      <span className="font-medium text-gray-800">{item.amount}</span>
+                    </div>
+                    <div className="mt-1 h-1.5 w-full rounded-full bg-amber-100">
+                      <div className="h-1.5 rounded-full bg-amber-500" style={{ width: `${item.pct}%` }} />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
+      {/* Transactions & Wallets Section */}
+      <div className="grid grid-cols-1 gap-4 xl:grid-cols-[1.4fr_1fr]">
+        <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-2xs">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-gray-100 p-4">
+            <h2 className="text-sm font-semibold text-gray-800">Crypto Transactions</h2>
+            <div className="flex items-center gap-2">
+              <div className="relative">
+                <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                <input
+                  placeholder="Search transactions..."
+                  className="w-44 rounded-lg border border-gray-200 py-1.5 pl-8 pr-3 text-xs text-gray-700 placeholder-gray-400 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 sm:w-56"
+                />
+              </div>
+              <button className="rounded-lg border border-gray-200 p-1.5 text-gray-500 hover:bg-gray-50">
+                <SlidersHorizontal size={14} />
+              </button>
+            </div>
+          </div>
 
-				</div >
-				<Pagination
-					currentPage={currentPage}
-					totalPages={10}
-					pageSize={pageSize}
-					onPageChange={(page) => setCurrentPage(page)}
-					onPageSizeChange={(size) => setPageSize(size)}
-				/>
-			</div>
-		</div>
-	)
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs text-gray-600">
+              <thead className="border-b border-gray-100 uppercase tracking-wide text-gray-400">
+                <tr>
+                  <th className="w-8 p-3"></th>
+                  <th className="p-3 font-medium">Asset</th>
+                  <th className="p-3 font-medium">Type</th>
+                  <th className="p-3 font-medium">Crypto Amount</th>
+                  <th className="p-3 font-medium">USD Value</th>
+                  <th className="p-3 font-medium">Date</th>
+                  <th className="w-8 p-3"></th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100">
+                {transactions.map((tx) => {
+                  const key = `${tx.name}-${tx.date}`;
+                  return (
+                    <tr key={key} className="hover:bg-gray-50/60">
+                      <td className="p-3">
+                        <input
+                          type="checkbox"
+                          checked={checked.includes(key)}
+                          onChange={() => toggleRow(key)}
+                          className="rounded border-gray-300 text-indigo-600 accent-indigo-600"
+                        />
+                      </td>
+                      <td className="p-3">
+                        <div className="flex items-center gap-2">
+                          <span className={`grid h-7 w-7 shrink-0 place-items-center rounded-full text-[10px] font-bold ${tx.tone}`}>
+                            {tx.initials}
+                          </span>
+                          <span className="font-medium text-gray-800">{tx.name}</span>
+                        </div>
+                      </td>
+                      <td className="p-3 text-gray-600">{tx.type}</td>
+                      <td className={`p-3 font-mono ${tx.amount.startsWith("+") ? "text-emerald-600" : "text-gray-700"}`}>
+                        {tx.amount}
+                      </td>
+                      <td className="p-3 font-mono text-gray-800">{tx.val}</td>
+                      <td className="whitespace-nowrap p-3 text-gray-500">{tx.date}</td>
+                      <td className="p-3 text-right">
+                        <button className="rounded-md p-1 text-gray-400 hover:bg-gray-100">
+                          <MoreVertical size={14} />
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-2xs">
+          <div className="flex items-center justify-between">
+            <h2 className="text-sm font-semibold text-gray-800">Crypto Wallets</h2>
+            <MoreVertical size={14} className="text-gray-400" />
+          </div>
+
+          <div className="mt-4 flex gap-3 overflow-x-auto pb-1">
+            <div className="flex min-w-[220px] flex-col justify-between rounded-2xl bg-gradient-to-br from-amber-500 to-orange-600 p-4 text-white shadow-md">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-semibold">Bitcoin Wallet</span>
+                <Bitcoin size={20} />
+              </div>
+              <div className="mt-3">
+                <p className="text-[10px] text-white/70">Balance</p>
+                <p className="text-lg font-bold">1.245 BTC</p>
+              </div>
+              <div className="mt-3 flex items-center justify-between text-[10px] text-white/80">
+                <span>0x8F...39A2</span>
+                <span className="font-semibold">~ $81,240 USD</span>
+              </div>
+            </div>
+
+            <div className="flex min-w-[220px] flex-col justify-between rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 p-4 text-white shadow-md">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-semibold">Ethereum Wallet</span>
+                <Wallet size={18} />
+              </div>
+              <div className="mt-3">
+                <p className="text-[10px] text-white/70">Balance</p>
+                <p className="text-lg font-bold">14.82 ETH</p>
+              </div>
+              <div className="mt-3 flex items-center justify-between text-[10px] text-white/80">
+                <span>0x3B...12C9</span>
+                <span className="font-semibold">~ $48,900 USD</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-4 flex flex-col gap-2 text-xs">
+            <div className="flex items-center justify-between">
+              <span className="text-gray-500">Total Portfolio (USD)</span>
+              <span className="font-semibold text-gray-900">$130,140.00</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-gray-500">Active Wallet</span>
+              <span className="font-medium text-gray-800">0x8F...39A2</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-gray-500">Network Fee Tier</span>
+              <span className="font-medium text-gray-800">Standard (12 Gwei)</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-gray-500">Security Status</span>
+              <span className="font-medium text-emerald-600">2FA Enabled</span>
+            </div>
+          </div>
+
+          <button className="mt-4 flex w-full items-center justify-center gap-1.5 rounded-lg border border-dashed border-gray-300 py-2 text-xs font-medium text-gray-600 hover:bg-gray-50">
+            <Plus size={14} />
+            Connect External Wallet
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 }
-
-export default DashBoard
