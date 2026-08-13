@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { FaSearch } from "react-icons/fa";
 import "./Sidebar.css";
 
@@ -17,6 +17,7 @@ import {
   Sparkles,
   PieChart,
   X,
+  LogOut,
 } from "lucide-react";
 
 const rmsChildren = [
@@ -56,8 +57,6 @@ const NavItem = ({ item, onNavigate, searchQuery }) => {
   const isSearching = searchQuery.trim().length > 0;
   const parentMatches = item.label && matches(item.label, searchQuery);
 
-  // While searching: auto-expand any parent that matches (directly or via a child).
-  // Otherwise: default open only if the route is currently inside it.
   const [manualOpen, setManualOpen] = useState(isRmsActive ?? false);
   const open = isSearching ? true : manualOpen;
 
@@ -66,8 +65,6 @@ const NavItem = ({ item, onNavigate, searchQuery }) => {
   }, [isSearching, isRmsActive]);
 
   if (item.children) {
-    // If the parent label itself matches, show all children.
-    // Otherwise, while searching, show only the children that match.
     const visibleChildren = isSearching && !parentMatches
       ? item.children.filter((c) => matches(c.label, searchQuery))
       : item.children;
@@ -76,8 +73,9 @@ const NavItem = ({ item, onNavigate, searchQuery }) => {
       <div>
         <button
           onClick={() => setManualOpen((o) => !o)}
-          className={`${linkBase} w-full justify-between ${isRmsActive ? "text-white" : linkInactive
-            }`}
+          className={`${linkBase} w-full justify-between ${
+            isRmsActive ? "text-white" : linkInactive
+          }`}
         >
           <span className="flex items-center gap-2.5">
             <item.icon size={17} />
@@ -125,17 +123,31 @@ const NavItem = ({ item, onNavigate, searchQuery }) => {
   );
 };
 
-export default function Sidebar({ mobileOpen, onClose }) {
-
+export default function Sidebar({ mobileOpen, onClose, onLogout }) {
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
 
   const filteredMenus = navItems.filter((menu) => {
     const mainMatch = menu.label?.toLowerCase().includes(searchQuery.toLowerCase());
     const subMatch = menu.children?.some((sub) =>
-      sub.label?.toLowerCase().includes(searchQuery.toLowerCase()))
+      sub.label?.toLowerCase().includes(searchQuery.toLowerCase())
+    );
     return mainMatch || subMatch;
-  })
+  });
 
+  const handleLogoutClick = () => {
+    // 1. Clear tokens & user session from local storage
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+
+    // 2. Call parent callback if defined
+    if (onLogout) {
+      onLogout();
+    }
+
+    // 3. Redirect to login page
+    navigate("/", { replace: true });
+  };
 
   return (
     <>
@@ -146,8 +158,9 @@ export default function Sidebar({ mobileOpen, onClose }) {
         />
       )}
       <aside
-        className={`fixed z-40 flex h-screen w-64 shrink-0 flex-col bg-[#151233] px-4 py-5 transition-transform duration-200 lg:sticky lg:top-0 lg:translate-x-0 ${mobileOpen ? "translate-x-0" : "-translate-x-full"
-          }`}
+        className={`fixed z-40 flex h-screen w-64 shrink-0 flex-col bg-[#151233] px-4 py-5 transition-transform duration-200 lg:sticky lg:top-0 lg:translate-x-0 ${
+          mobileOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
       >
         <div className="flex items-center justify-between px-1 pb-4">
           <div className="flex items-center gap-2">
@@ -164,14 +177,6 @@ export default function Sidebar({ mobileOpen, onClose }) {
           </button>
         </div>
 
-        {/* <button className="mb-2 flex w-full items-center justify-between rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-left text-xs font-medium text-slate-200 hover:bg-white/10">
-          Gracia Advisory Group
-          <ChevronDown size={14} className="text-slate-400" />
-        </button>
-        <button className="mb-4 flex w-full items-center justify-between rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-left text-xs font-medium text-slate-200 hover:bg-white/10">
-          ABC Advisory
-          <ChevronDown size={14} className="text-slate-400" />
-        </button> */}
         <div className="relative mb-4">
           <FaSearch className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-xs text-slate-500" />
           <input
@@ -182,6 +187,7 @@ export default function Sidebar({ mobileOpen, onClose }) {
             className="w-full rounded-lg border border-white/10 bg-white/5 py-2 pl-9 pr-3 text-xs text-slate-200 placeholder:text-slate-500 outline-none focus:border-indigo-400/50 focus:ring-2 focus:ring-indigo-500/20"
           />
         </div>
+
         <nav className="flex flex-1 flex-col gap-1 overflow-y-auto pr-1">
           {filteredMenus.length === 0 ? (
             <p className="px-3 py-2 text-xs text-slate-500">No matches.</p>
@@ -197,13 +203,18 @@ export default function Sidebar({ mobileOpen, onClose }) {
           )}
         </nav>
 
-        {/* <nav className="flex flex-1 flex-col gap-1 overflow-y-auto pr-1">
-          {navItems.map((item) => (
-            <NavItem key={item.label} item={item} onNavigate={onClose} />
-          ))}
-        </nav> */}
+        {/* Logout Button */}
+        <div className="pt-2 border-t border-white/10">
+          <button
+            onClick={handleLogoutClick}
+            className={`${linkBase} ${linkInactive} w-full text-red-400 hover:bg-red-500/10 hover:text-red-300`}
+          >
+            <LogOut size={17} />
+            Logout
+          </button>
+        </div>
 
-        <div className="mt-4 border-t border-white/10 pt-4 text-[11px] text-slate-500">
+        <div className="mt-2 text-[11px] text-slate-500">
           © {new Date().getFullYear()} FinBowl
         </div>
       </aside>

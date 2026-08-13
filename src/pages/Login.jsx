@@ -121,12 +121,12 @@ export default function Login({ onLogin }) {
               <label className="text-xs font-semibold text-gray-700">
                 Password
               </label>
-              <a
-                href="#forgot"
+              <Link
+                to="/forgot-password"
                 className="text-xs font-medium text-indigo-600 hover:text-indigo-700"
               >
                 Forgot password?
-              </a>
+              </Link>
             </div>
             <div className="relative">
               <Lock className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />

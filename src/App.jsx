@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-import { Routes, Route, Navigate, Outlet } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
+import ForgotPassword from "./pages/ForgotPassword";
+import VerifyReset from "./pages/VerifyReset";
 
 import Dashboard from "./pages/Dashboard";
 import Finance from "./pages/Finance";
@@ -37,7 +39,7 @@ export default function App() {
 
   return (
     <Routes>
-      {/* Public Routes - Rendered directly if NOT authenticated */}
+      {/* Public Routes */}
       <Route
         path="/"
         element={
@@ -58,8 +60,22 @@ export default function App() {
           )
         }
       />
+      <Route
+        path="/forgot-password"
+        element={
+          !isAuthenticated ? (
+            <ForgotPassword />
+          ) : (
+            <Navigate to="/dashboard" replace />
+          )
+        }
+      />
+      <Route
+        path="/verify-reset"
+        element={<VerifyReset onLogin={handleLoginSuccess} />}
+      />
 
-      {/* Protected Routes - Render PortalLayout only if authenticated */}
+      {/* Protected Routes */}
       <Route
         element={
           isAuthenticated ? (
@@ -86,7 +102,7 @@ export default function App() {
         <Route path="/reports" element={<Reports />} />
       </Route>
 
-      {/* Catch-all fallback */}
+      {/* Fallback */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
