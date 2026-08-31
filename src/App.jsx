@@ -6,7 +6,7 @@ import SignUp from "./pages/SignUp";
 import ForgotPassword from "./pages/ForgotPassword";
 import VerifyReset from "./pages/VerifyReset";
 
-import Dashboard from "./pages/Dashboard";
+
 import Finance from "./pages/Finance";
 import SalesCRM from "./pages/SalesCRM";
 import Compliance from "./pages/Compliance";
@@ -21,6 +21,7 @@ import Invoices from "./pages/rms/Invoices";
 import PO from "./pages/rms/PO";
 import RMSReports from "./pages/rms/RMSReports";
 import PortalLayout from "./Layout/PortalLayout";
+import DashBoard from "./pages/Dashboard";
 
 
 export default function App() {
@@ -86,7 +87,7 @@ export default function App() {
           )
         }
       >
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/dashboard" element={<DashBoard />} />
         <Route path="/finance" element={<Finance />} />
         <Route path="/sales-crm" element={<SalesCRM />} />
 
