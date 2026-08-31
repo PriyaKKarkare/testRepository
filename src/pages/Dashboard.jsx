@@ -355,7 +355,7 @@ function Modal({ children, onClose, maxWidth = "max-w-lg" }) {
    MAIN COMPONENT
 ========================================================= */
 
-export default function Dashboard() {
+export default function DashBoard() {
   /* =======================================================
      STATE
   ======================================================= */
