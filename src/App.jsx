@@ -21,7 +21,7 @@ import Invoices from "./pages/rms/Invoices";
 import PO from "./pages/rms/PO";
 import RMSReports from "./pages/rms/RMSReports";
 import PortalLayout from "./Layout/PortalLayout";
-import DashBoard from "./pages/Dashboard";
+import Dashboard from "./pages/Dashboard";
 
 
 export default function App() {
@@ -87,7 +87,7 @@ export default function App() {
           )
         }
       >
-        <Route path="/dashboard" element={<DashBoard />} />
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/finance" element={<Finance />} />
         <Route path="/sales-crm" element={<SalesCRM />} />
 
